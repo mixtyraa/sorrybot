@@ -5,7 +5,8 @@
   "repository": "",
   "license": "-",
   "scripts": {
-    "dev": "ts-node-dev -r dotenv/config -r tsconfig-paths/register --respawn --transpileOnly ./src/application.ts"
+    "dev": "ts-node-dev -r dotenv/config -r tsconfig-paths/register --respawn --transpileOnly ./src/application.ts",
+    "start": "ts-node -r dotenv/config -r tsconfig-paths/register ./src/application.ts"
   },
   "dependencies": {
     "dateformat": "^3.0.3",
