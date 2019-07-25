@@ -1,0 +1,27 @@
+{
+  "name": "sorrybot",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "",
+  "license": "-",
+  "scripts": {
+    "dev": "ts-node-dev -r dotenv/config -r tsconfig-paths/register --respawn --transpileOnly ./src/application.ts"
+  },
+  "dependencies": {
+    "dateformat": "^3.0.3",
+    "dotenv": "^8.0.0",
+    "remark": "^10.0.1",
+    "remove-markdown": "^0.3.0",
+    "strip-markdown": "^3.0.4",
+    "trello": "^0.9.1",
+    "ts-node": "^8.0.3",
+    "ts-node-dev": "^1.0.0-pre.32",
+    "tsconfig-paths": "^3.8.0",
+    "tslint": "^5.15.0",
+    "typescript": "^3.4.2",
+    "vk-io": "^4.0.0-rc.19"
+  },
+  "devDependencies": {
+    "@types/dateformat": "^3.0.0"
+  }
+}
