@@ -1,17 +1,17 @@
-import VK from 'vk-io';
+import VKIO from 'vk-io';
 import Chat from '~/App/Chat';
-import Member from '~/App/Member';
+import Member from '~/App/members/Member';
 
-export default class VkIntegration {
-  private vk: VK = null;
+class VkIntegration {
+  private vk: VKIO = null;
 
   public constructor() {
-    this.vk = new VK({
+    this.vk = new VKIO({
       token: process.env.BOT_VK_TOKEN
     });
   }
 
-  public async getMemberChat(peer_id: number): Promise < Member[] | boolean > {
+  public async getMemberChat(peer_id: number): Promise < Member[] > {
     const response = await this.vk.api.messages.getConversationMembers({
       peer_id,
       fields: ['domain']
@@ -29,21 +29,19 @@ export default class VkIntegration {
     return result;
   }
 
-  public async getConversations(peer_ids: number | number[]) {
-    try {
-      const response = await this.vk.api.messages.getConversationsById({
-        peer_ids,
-      });
+  public async getConversations(peer_ids: number | number[]): Promise<Chat[]> {
 
-      return response.items.map((items) => {
-        const chat = new Chat();
-        chat.member_ids = items.chat_settings.active_ids;
-        chat.name = items.chat_settings.title;
-        return chat;
-      });
-    } catch {
-      return false;
-    }
+    const response = await this.vk.api.messages.getConversationsById({
+      peer_ids,
+    });
+
+    return response.items.map((items) => {
+      const chat = new Chat();
+      // chat.member_ids = items.chat_settings.active_ids;
+      chat.name = items.chat_settings.title;
+      return chat;
+    });
+
   }
 
   public async getUser(user_ids: string | string[]): Promise < Member[] > {
@@ -61,3 +59,5 @@ export default class VkIntegration {
     });
   }
 }
+
+export const VK = new VkIntegration();
