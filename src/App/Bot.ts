@@ -1,7 +1,9 @@
 import VK, {MessageContext} from 'vk-io';
-import CommandsList from '~/App/CommandList';
-import { ICommand } from '~/App/CommandList';
-import Member from './Member';
+import { ICommand } from '~/App/commands/interfaces';
+import {ListCommands} from '~/App/commands/ListCommands';
+import { Trello } from '~/Integration/trello/TrelloWrap';
+import Chat from './Chat';
+import Member from './members/Member';
 
 export default class Bot {
   private vk: VK;
@@ -16,8 +18,10 @@ export default class Bot {
     });
   }
 
-  public start() {
-    CommandsList.commandList.forEach((command) => {
+  public async start() {
+    await Trello.start();
+
+    ListCommands.forEach((command) => {
       this.vk.updates.hear(command.commnad, (ctx) => {
         this.callAction(ctx, command);
       });
@@ -32,6 +36,11 @@ export default class Bot {
     let allowed = false;
 
     member.roles.forEach((role) => {
+      if (role.commands.indexOf('*') !== -1) {
+        allowed = true;
+        return false;
+      }
+
       const res = role.commands.find((cmd) => cmd === commnad.commnad);
       if (res) {
         allowed = true;
@@ -39,10 +48,12 @@ export default class Bot {
       }
     });
 
-    if (ctx.isChat === true) {
-      allowed = commnad.canChat;
-    } else {
-      allowed = commnad.canUser;
+    if (allowed) {
+      if (ctx.isChat === true) {
+        allowed = commnad.canChat;
+      } else {
+        allowed = commnad.canUser;
+      }
     }
 
     if (allowed) {
