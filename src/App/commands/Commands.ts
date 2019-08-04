@@ -23,23 +23,34 @@ export async function getAcceptedEvents(ctx: MessageContext): Promise<string> {
   let result: string = '';
 
   events.filter((event) => event.chats.find((chat) => +chat.vkId === ctx.peerId))
-  .forEach((event, idx) => {
-    result += `\n`;
-    result += `${idx + 1}) ${event.name}\n`;
-    if (event.description) {
-      result += `${event.description}\n`;
-    }
+    .forEach((event, idx) => {
+      result += `\n`;
+      result += `${idx + 1}) ${event.name}\n`;
+      if (event.description) {
+        result += `${event.description}\n`;
+      }
 
-    if (event.dateStart.getTime() !== 0) {
-      result += `Когда: ${dateformat(event.dateStart, 'dd.mm.yyyy HH:MM')}`;
-    }
-    result += `\n`;
+      if (event.dateStart.getTime() !== 0) {
+        result += `Когда: ${dateformat(event.dateStart, 'dd.mm.yyyy HH:MM')}`;
+      }
+      result += `\n`;
   });
+
+  if (result.length === 0) {
+    result = 'У вас нет событий вы талые 👎👎👎💩🙉🙈';
+  }
+  console.log(events);
   return result;
 }
 
 export async function getAbout(ctx: MessageContext): Promise<string> {
-  const ver = await getVersion();
+  let ver = null;
+  try {
+    ver = await getVersion();
+  } catch {
+    ver = 'Тебя вообще ебёт какая ???!?!!?';
+  }
+
   let result = 'Sorry Bot 🏴‍☠😎';
   if (ver) {
     result += `\nVersion: ${ver}`;
