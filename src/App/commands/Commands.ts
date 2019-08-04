@@ -4,6 +4,7 @@ import { VK } from "~/Integration/VkIntegration";
 import { EventTypes } from "../Event";
 
 import dateformat from 'dateformat';
+import { getVersion } from "~/Helper/getVersion";
 
 export async function start(ctx: MessageContext): Promise<string> {
   try {
@@ -34,5 +35,14 @@ export async function getAcceptedEvents(ctx: MessageContext): Promise<string> {
     }
     result += `\n`;
   });
+  return result;
+}
+
+export async function getAbout(ctx: MessageContext): Promise<string> {
+  const ver = await getVersion();
+  let result = 'Sorry Bot';
+  if (ver) {
+    result += `\nVersion: ${ver}`;
+  }
   return result;
 }
