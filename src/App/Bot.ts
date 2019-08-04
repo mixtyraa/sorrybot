@@ -12,10 +12,6 @@ export default class Bot {
     this.vk = new VK({
       token: process.env.BOT_VK_TOKEN
     });
-    this.vk.updates.use((ctx, next) => {
-      console.log(ctx);
-      next();
-    });
   }
 
   public async start() {

@@ -40,7 +40,7 @@ export async function getAcceptedEvents(ctx: MessageContext): Promise<string> {
 
 export async function getAbout(ctx: MessageContext): Promise<string> {
   const ver = await getVersion();
-  let result = 'Sorry Bot';
+  let result = 'Sorry Bot 🏴‍☠😎';
   if (ver) {
     result += `\nVersion: ${ver}`;
   }

@@ -95,4 +95,8 @@ export default class TrelloApi {
   public async getTokensWebhooks(token: string): Promise <IWebhook[]> {
     return this.request('get', `/1/tokens/${token}/webhooks`);
   }
+
+  public async getCardsList(id: string): Promise <IList> {
+    return this.request('get', `/1/cards/${id}/list`);
+  }
 }

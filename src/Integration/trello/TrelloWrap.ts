@@ -310,18 +310,40 @@ class TrelloWrap {
     await this.expressServer.head(process.env.TRELLO_WEBHOOK_PATH, (req, res) => {
       res.end();
     });
-    await this.expressServer.post(process.env.TRELLO_WEBHOOK_PATH, (req, res) => {
+    await this.expressServer.post(process.env.TRELLO_WEBHOOK_PATH, async (req, res) => {
       res.end();
-      const action: IAction = req.body.action;
-      console.log(action.type);
-      switch (action.type) {
-        case 'updateCard':
-        case 'createCard':
-        case 'deleteCard':
-          const list = this.mapListCard.find((x) => x.id === action.data.list.id);
-          if (list.cachePath) {
-            MemoryCache.clear(list.cachePath);
-          }
+      try {
+        const action: IAction = req.body.action;
+        switch (action.type) {
+          case 'updateCard':
+          case 'createCard':
+          case 'deleteCard':
+          case 'addAttachmentToCard':
+          case 'commentCard':
+          case 'copyCard':
+          case 'copyCommentCard':
+            const list = this.mapListCard.find((x) => x.id === action.data.list.id);
+            if (list.cachePath) {
+              MemoryCache.clear(list.cachePath);
+            }
+            break;
+          case 'deleteAttachmentFromCard':
+            const trelloList = await this.trelloConnection.getCardsList(action.data.card.id);
+            if (trelloList.id) {
+              const listmapped = this.mapListCard.find((x) => x.id === trelloList.id);
+              if (listmapped) {
+                MemoryCache.clear(listmapped.cachePath);
+              }
+            }
+            break;
+          default:
+            console.error(`Нет обработдчика вебхука на событие: ${action.type}`);
+            MemoryCache.clear(); // сбрасываем весь кеш
+        }
+      } catch (e) {
+        console.error(e);
+        // если обновились данные в трелло, а бот их не смог обработать скидыаем весь кеш нахер
+        MemoryCache.clear();
       }
     });
     this.updateWebhook();
