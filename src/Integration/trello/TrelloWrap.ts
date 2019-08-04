@@ -153,7 +153,7 @@ class TrelloWrap {
     chats.reduce((accChats, chat) => {
       const newChat = Chat.parseTrello(chat);
 
-      if (newChat) {
+      if (!newChat) {
         return accChats;
       }
 
