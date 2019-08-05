@@ -5,6 +5,7 @@ import { EventTypes } from "../Event";
 
 import dateformat from 'dateformat';
 import { getVersion } from "~/Helper/getVersion";
+import Premiercinema from "~/Services/cinemas/Premiercinema";
 
 export async function start(ctx: MessageContext): Promise<string> {
   try {
@@ -55,5 +56,22 @@ export async function getAbout(ctx: MessageContext): Promise<string> {
   if (ver) {
     result += `\nVersion: ${ver}`;
   }
+  return result;
+}
+
+export async function getPosterToday(ctx: MessageContext): Promise<string> {
+  const pc = new Premiercinema();
+  const films = await pc.getPosterToday();
+  let result = '';
+  films.forEach((film, idx) => {
+    result += `
+${idx + 1}) ${film.name}
+Страна ${film.country}
+Жанр ${film.genre}
+Продолжительность ${film.duration}
+В кино ${film.startdate}
+
+`;
+  });
   return result;
 }
