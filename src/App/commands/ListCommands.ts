@@ -7,27 +7,31 @@ export const ListCommands: ICommand[] = [
     info: 'Добавляет беседу в трелло',
     canChat: true,
     canUser: false,
-    action: start
+    action: start,
+    code: 'start',
   },
   {
     commnad: '/события',
     info: 'Показывает события',
     canChat: true,
     canUser: false,
-    action: getAcceptedEvents
+    action: getAcceptedEvents,
+    code: 'getAcceptedEvents',
   },
   {
     commnad: '/бот',
     info: 'Информация о боте',
     canChat: true,
     canUser: true,
-    action: getAbout
+    action: getAbout,
+    code: 'getAbout',
   },
   {
     commnad: '/кино',
     info: 'Афиша в премьере на этот месяц',
     canChat: true,
     canUser: true,
-    action: getPosterToday
+    action: getPosterToday,
+    code: 'getPosterToday'
   }
 ];
