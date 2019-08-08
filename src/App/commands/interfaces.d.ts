@@ -6,4 +6,6 @@ export interface ICommand {
   action: (ctx: MessageContext) => Promise < string > ;
   canChat?: boolean;
   canUser?: boolean;
+  canDialogflos?: boolean;
+  code: string;
 }
