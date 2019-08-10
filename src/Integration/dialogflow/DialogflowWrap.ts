@@ -1,9 +1,10 @@
 
 import dialogflow from 'dialogflow';
 import uuid from 'uuid';
+import { IAction } from './interfaces';
 
 class DialogflowWrap {
-  public async defineAction(text: string): Promise<string> {
+  public async defineAction(text: string): Promise<IAction> {
     const sessionId = uuid.v4();
     const sessionClient = new dialogflow.SessionsClient({
       credentials: {
@@ -23,7 +24,10 @@ class DialogflowWrap {
     };
 
     const response = await sessionClient.detectIntent(request);
-    return response[0].queryResult.action;
+    return {
+      action: response[0].queryResult.action,
+      params: response[0].queryResult.parameters,
+    };
 
   }
 

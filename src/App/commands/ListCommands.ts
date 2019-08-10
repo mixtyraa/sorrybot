@@ -28,7 +28,7 @@ export const ListCommands: ICommand[] = [
   },
   {
     commnad: '/кино',
-    info: 'Афиша в премьере на этот месяц',
+    info: 'Афиша в Премьере на этот месяц',
     canChat: true,
     canUser: true,
     action: getPosterToday,

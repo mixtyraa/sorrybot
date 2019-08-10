@@ -1,5 +1,12 @@
 import Bot from './App/Bot';
+import { Trello } from './Integration/trello/TrelloWrap';
 
-new Bot().start().then(() => {
-  console.log('Valera is started');
-});
+(async () => {
+  await Trello.start().then(() => {
+    console.log('Trello init');
+  });
+
+  new Bot().start().then(() => {
+    console.log('Valera is started');
+  });
+})();
