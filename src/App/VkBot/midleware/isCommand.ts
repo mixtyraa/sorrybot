@@ -1,4 +1,5 @@
 import Executor from '../Executor';
+import { command } from './command';
 import { MessageContextExtended } from './interfaces';
 
 /**
@@ -8,7 +9,14 @@ import { MessageContextExtended } from './interfaces';
  * @param ctx
  * @param next
  */
-export function isCommand(ctx: MessageContextExtended, next: () => {}) {
-  ctx.isCommand =  ctx.text[0] === '/';
-  Executor.do(ctx);
+export function isCommand(ctx: MessageContextExtended, next: () => void) {
+  ctx.isCommand = (ctx.text || '')[0] === '/';
+
+  if (ctx.isCommand) {
+    command(ctx, () => {
+      Executor.do(ctx);
+    });
+  } else {
+    next();
+  }
 }

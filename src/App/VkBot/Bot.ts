@@ -67,10 +67,10 @@ export default class Bot {
      * изи выполнение запрещено
      */
     this.vk.updates.use(command);
-
   }
 
   public async start() {
+    this.initMw();
     this.vk.updates.on('message', async (ctx: MessageContextExtended, next) => {
       Executor.do(ctx);
     });

@@ -1,4 +1,4 @@
-import Bot from './App/Bot';
+import Bot from '~/App/VkBot/Bot';
 import { Trello } from './Integration/trello/TrelloWrap';
 
 (async () => {

@@ -8,14 +8,13 @@ import { MessageContextExtended } from './interfaces';
  * @param ctx
  * @param next
  */
-export async function command(ctx: MessageContextExtended, next: () => {}) {
+export async function command(ctx: MessageContextExtended, next: () => void) {
   if (ctx.isCommand) {
-    const ctxCmd = ctx.text.slice(0, ctx.text.indexOf(' '));
+    const end = ctx.text.indexOf(' ') === -1 ? ctx.text.length : ctx.text.indexOf(' ');
+    const ctxCmd = ctx.text.slice(0,  end);
     ctx.command = ListCommands.find((cmd) => cmd.commnad === ctxCmd);
   } else {
-    ctx.command = ListCommands.find(
-      (cmd) => cmd.code === ctx.action.action
-    );
+    ctx.command = ListCommands.find((cmd) => cmd.commnad === ctx.action.action);
   }
 
   if (ctx.command) {
@@ -28,6 +27,7 @@ export async function command(ctx: MessageContextExtended, next: () => {}) {
       }
 
       const res = role.commands.find((cmd) => cmd === ctx.command.code);
+
       if (res) {
         allowed = true;
         return false;
@@ -41,12 +41,11 @@ export async function command(ctx: MessageContextExtended, next: () => {}) {
           allowed = ctx.commnad.canUser;
         }
       }
-
-      // если действие разрешено идем дальше
-      if (allowed) {
-        next();
-      }
     });
+    // если действие разрешено идем дальше
+    if (allowed) {
+      next();
+    }
   }
 
 }
