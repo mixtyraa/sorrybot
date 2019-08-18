@@ -1,3 +1,12 @@
-import Bot from './App/Bot';
+import Bot from '~/App/VkBot/Bot';
+import { Trello } from './Integration/trello/TrelloWrap';
 
-new Bot().start();
+(async () => {
+  await Trello.start().then(() => {
+    console.log('Trello init');
+  });
+
+  new Bot().start().then(() => {
+    console.log('Valera is started');
+  });
+})();

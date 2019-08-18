@@ -40,7 +40,7 @@ export async function getAcceptedEvents(ctx: MessageContext): Promise<string> {
   if (result.length === 0) {
     result = 'У вас нет событий вы талые 👎👎👎💩🙉🙈';
   }
-  console.log(events);
+
   return result;
 }
 
