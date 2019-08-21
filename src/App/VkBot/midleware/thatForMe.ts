@@ -1,10 +1,13 @@
 import { MessageContextExtended } from "./interfaces";
 
-const triggers: string[] = ['валера',
+const triggers: string[] = [
+  'валера',
   'валер',
   'валерчик',
   'валерий аркадьевич',
-  'рыжий'
+  'рыжий',
+  'валерьян',
+  'валерьяныч',
 ];
 
 /**
