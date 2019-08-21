@@ -7,6 +7,7 @@ import Event from '~/App/Event';
 import {EventTypes} from '~/App/Event';
 import Member from '~/App/members/Member';
 import Roles from '~/App/members/Roles';
+import getExternalIp from '~/Helper/getExternalIp';
 import TrelloApi from '~/Integration/trello/TrelloApi';
 import { IAction } from './interfaces';
 
@@ -16,7 +17,15 @@ interface IUnitUnfo {
   cachePath ?: string;
 }
 
+export interface ITrelloOptions {
+  protocol: 'http' | 'https';
+}
+
 class TrelloWrap {
+  public options: ITrelloOptions = {
+    protocol: 'http',
+  };
+
   protected readonly infoBoard: IUnitUnfo = {
     id: process.env.TRELLO_BOARD,
     name: process.env.TRELLO_BOARD,
@@ -75,7 +84,11 @@ class TrelloWrap {
 
   protected expressServer: Express.Application = null;
 
-  public constructor() {
+  public constructor(options?: ITrelloOptions) {
+    if (options) {
+      this.options = options;
+    }
+
     if (!process.env.TRELLO_APP_KEY) {
       throw new Error('Trello TRELLO_APP_KEY not set up');
     }
@@ -351,12 +364,19 @@ class TrelloWrap {
 
   public async updateWebhook() {
     const existsToken = await this.trelloConnection.getTokensWebhooks(process.env.TRELLO_TOKEN);
-    const whUrl = `${process.env.TRELLO_WEBHOOK_BASE_URL}${process.env.TRELLO_WEBHOOK_PATH}`;
-    const isActiveWebhook = existsToken.find((wh) => wh.callbackURL === whUrl && wh.active);
+    let webhookurl = '';
+    if (process.env.TRELLO_WEBHOOK_BASE_URL) {
+      webhookurl = process.env.TRELLO_WEBHOOK_BASE_URL;
+    } else {
+      webhookurl = `${this.options.protocol}://${await getExternalIp()}`;
+    }
+    webhookurl += process.env.TRELLO_WEBHOOK_PATH || '';
+
+    const isActiveWebhook = existsToken.find((wh) => wh.callbackURL === webhookurl && wh.active);
     if (!isActiveWebhook) {
       try {
         await this.trelloConnection.addWebhook({
-          callbackURL: whUrl,
+          callbackURL: webhookurl,
           idModel: this.infoBoard.id,
         });
       } catch (e) {
@@ -370,4 +390,6 @@ class TrelloWrap {
   }
 }
 
-export const Trello = new TrelloWrap();
+export const Trello = new TrelloWrap({
+  protocol: "http",
+});
