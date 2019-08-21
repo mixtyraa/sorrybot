@@ -36,9 +36,9 @@ export async function command(ctx: MessageContextExtended, next: () => void) {
       // проверяем может ли команда выполнятся из чата или диалога
       if (allowed) {
         if (ctx.isChat === true) {
-          allowed = ctx.commnad.canChat;
+          allowed = ctx.command.canChat;
         } else {
-          allowed = ctx.commnad.canUser;
+          allowed = ctx.command.canUser;
         }
       }
     });
