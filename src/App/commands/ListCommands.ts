@@ -1,4 +1,4 @@
-import { getAbout, getAcceptedEvents, getPosterToday, start } from '~/App/commands/Commands';
+import { getAbout, getAcceptedEvents, getHelp, getPosterToday, start, tea } from '~/App/commands/Commands';
 import { ICommand } from '~/App/commands/interfaces';
 
 export const ListCommands: ICommand[] = [
@@ -33,5 +33,21 @@ export const ListCommands: ICommand[] = [
     canUser: true,
     action: getPosterToday,
     code: 'getPosterToday'
+  },
+  {
+    commnad: '/хелп',
+    info: 'Список доступных команд',
+    canChat: true,
+    canUser: true,
+    action: getHelp,
+    code: 'getHelp'
+  },
+  {
+    commnad: '/чай',
+    info: 'Ставит чайник',
+    canChat: true,
+    canUser: true,
+    action: tea,
+    code: 'tea'
   }
 ];

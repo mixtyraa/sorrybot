@@ -10,5 +10,10 @@ export const RoleList: IRole[] = [
     code: 'member',
     name: 'Участник',
     commands: ['getAcceptedEvents', 'getAbout', 'getPosterToday']
+  },
+  {
+    code: 'kristinaurk',
+    name: 'Кристя',
+    commands: ['tea']
   }
 ];
